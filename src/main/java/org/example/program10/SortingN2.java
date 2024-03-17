@@ -6,6 +6,8 @@ package org.example.program10;
 // - Insertion sort
 
 
+import java.util.Arrays;
+
 public class SortingN2 {
 
 
@@ -61,25 +63,24 @@ public class SortingN2 {
 
     // Insertion sort on an array of integers (ascending)
     public static SortResult insertionSort(int[] array) {
-        int unsortedValue;
-        int scan;
-        int comparisons = 0;
-        int swaps = 0;
 
-        for (int index = 1; index < array.length; index++) {
-            unsortedValue = array[index];
-            scan = index;
+        // Make a copy of the array to sort
+        int[] arrayToSort = Arrays.copyOf(array, array.length);
 
-            while (scan > 0 && array[scan - 1] > unsortedValue) {
-                comparisons++;
-                array[scan] = array[scan - 1];
-                scan--;
-                swaps++;
+        int[] count = new int[2];
+
+        for (int index = 1; index < arrayToSort.length; index++) {
+            int key = arrayToSort[index];
+            int position = index;
+            while (position > 0 && arrayToSort[position - 1] > key) {
+                count[0]++;
+                arrayToSort[position] = arrayToSort[position - 1];
+                position--;
+                count[1]++;
             }
-
-            array[scan] = unsortedValue;
+            arrayToSort[position] = key;
         }
-        return new SortResult(array, comparisons, swaps);
+        return new SortResult(arrayToSort, count[0], count[1]);
     }
 
     // Bubble sort on an array of integers (ascending)

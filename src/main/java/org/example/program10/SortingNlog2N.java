@@ -15,23 +15,22 @@ public class SortingNlog2N {
     //   1) Work is done to convert random array int heap
     //   2) Array is sorted by swapping the largest element and reheaping
     public static SortResult heapSort(int[] array) {
-        int index;
-        int numValues = array.length;
-        int comparisons = 0;
-        int swaps = 0;
+        int[] sortedArray = Arrays.copyOf(array, array.length);
+        int[] count = new int[2];
+        int lastIndex = sortedArray.length - 1;
 
-        for (index = numValues / 2 - 1; index >= 0; index--) {
-            comparisons++;
-            reheapDown(array, index, numValues - 1);
+        // Convert the array of values into a heap.
+        for (int rootIndex = lastIndex / 2; rootIndex >= 0; rootIndex--)
+            reheapDown(sortedArray, rootIndex, lastIndex, count);
+
+        // Sort the array.
+        for (int lastIndexYouCanSwapWith = lastIndex; lastIndexYouCanSwapWith > 0; lastIndexYouCanSwapWith--) {
+            swap(sortedArray, 0, lastIndexYouCanSwapWith);
+            count[1]++; // Count swap
+            reheapDown(sortedArray, 0, lastIndexYouCanSwapWith - 1, count);
         }
 
-        for (index = numValues - 1; index >= 1; index--) {
-            swaps++;
-            swap(array, 0, index);
-            reheapDown(array, 0, index - 1);
-        }
-
-        return new SortResult(array, comparisons, swaps);
+        return new SortResult(sortedArray, count[0], count[1]);
     }
 
     // -----------------------------------------------------------------------
@@ -39,8 +38,8 @@ public class SortingNlog2N {
     // a binary tree to a heap after a removal from the root.  This is
     // a basic, specific algorithm for integer heaps only.
     // Postcondition: Heap property is restored.
-    private static void reheapDown(int[] elements, int root, int bottom) {
-        int maxChild = 0;
+    private static void reheapDown(int[] elements, int root, int bottom, int[] count) {
+        int maxChild;
         int rightChild;
         int leftChild;
 
@@ -48,16 +47,22 @@ public class SortingNlog2N {
         rightChild = root * 2 + 2;
 
         if (leftChild <= bottom) {
+            count[0]++;
             if (leftChild == bottom)
                 maxChild = leftChild;
-            else if (elements[leftChild] <= elements[rightChild])
-                maxChild = rightChild;
-            else
-                maxChild = leftChild;
+            else {
+                count[0]++;
+                if (elements[leftChild] <= elements[rightChild])
+                    maxChild = rightChild;
+                else
+                    maxChild = leftChild;
+            }
 
+            count[0]++;
             if (elements[root] < elements[maxChild]) {
                 swap(elements, root, maxChild);
-                reheapDown(elements, maxChild, bottom);
+                count[1]++;
+                reheapDown(elements, maxChild, bottom, count);
             }
         }
     }
@@ -107,8 +112,8 @@ public class SortingNlog2N {
                 count[1]++;
             }
         }
-
         swap(array, start, endOfLeftList);
+        count[1]++;
         return endOfLeftList;
     }
 
@@ -162,9 +167,11 @@ public class SortingNlog2N {
         }
         while (i < left.length) {
             array[k++] = left[i++];
+            count[1]++;
         }
         while (j < right.length) {
             array[k++] = right[j++];
+            count[1]++;
         }
     }
 }

@@ -89,10 +89,15 @@ public class SortingPerformance extends Application {
     }
 
     private void startSortFunction() throws IOException {
+        // Files to read
+        // Held in an array for easy iteration
         String[] files = {"inverse.txt", "random.txt", "almost.txt"};
 
         // N2 Arrays
+        // Read the files into arrays
+        // 2D array to hold the arrays for each file
         int[][] arraysForN2 = new int[files.length][];
+        // Read the files into the arrays
         for (int i = 0; i < files.length; i++) {
             arraysForN2[i] = readFile(files[i]);
         }
@@ -103,6 +108,7 @@ public class SortingPerformance extends Application {
             arraysForNlog2N[i] = readFile(files[i]);
         }
 
+        // Class to hold the results of the sorting algorithms
         SortResult sortResult;
 
         // Sorting N2 Algorithms and methods

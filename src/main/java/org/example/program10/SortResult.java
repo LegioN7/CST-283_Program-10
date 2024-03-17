@@ -1,9 +1,9 @@
 package org.example.program10;
 
 public class SortResult {
-    private int[] sortedArray;
-    private int comparisons;
-    private int swaps;
+    private final int[] sortedArray;
+    private final int comparisons;
+    private final int swaps;
 
     public SortResult(int[] sortedArray, int comparisons, int swaps) {
         this.sortedArray = sortedArray;
